@@ -45,8 +45,7 @@ def extrair_classificacao(page, org_id):
         classificacao = None
 
         # tenta localizar o bloco da árvore
-        blocos = page.locator("ul.l-participants-tree li")
-
+        blocos = page.locator("ul.l-participants-tree li a.organization-type")
         total_blocos = blocos.count()
 
         print(f"Blocos encontrados: {total_blocos}")
@@ -65,15 +64,16 @@ def extrair_classificacao(page, org_id):
 
             # captura classificação
             try:
-                classificacao = bloco.locator("span.icon-group__icon").inner_text().strip()
-            except:
+                classificacao = bloco.locator("span.icon-group__icon").first.inner_text().strip()
+            except Exception as e:
+                print(f"Erro classificação: {e}")
                 classificacao = None
-
+            
             # captura nome
             try:
-                spans = bloco.locator("span")
-                nome = spans.nth(1).inner_text().strip()
-            except:
+                nome = bloco.locator("span.text").first.inner_text().strip()
+            except Exception as e:
+                print(f"Erro nome: {e}")
                 nome = None
 
             if classificacao:
